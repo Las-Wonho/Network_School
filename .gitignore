@@ -37,3 +37,4 @@ UnitTest/Debug/
 node_modules/
 Server/uploads/
 NSF/.idea/*.*
+NSF/.idea/workspace.xml
