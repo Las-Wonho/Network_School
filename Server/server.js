@@ -41,6 +41,7 @@ async function list(ctx, next) {
 };
 async function list_(ctx, next) {
     console.log("Main page detect");
+    console.log(ctx.body);
 };
 
 
