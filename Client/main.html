@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Main</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<script>
+    var count_login = 0;
+    var count_signup = 0;
+    function login() {
+        if (count_login == 0) {
+
+            document.getElementsByClassName("login_page")[0].innerHTML = "\
+        <div class='longin'>\
+                    <tr>\
+                        <td>ID:</td>\
+                        <td><input type='text' name='id' /></td>\
+                    </tr>\
+                    <tr>\
+                        <td>Pswd:</td>\
+                        <td><input type='password' name='pswd' /></td>\
+                    </tr>\
+                    <tr>\
+                        <td></td>\
+                        <div class='sumit' onclick='login_request()'></div>\
+                    </tr>\
+        </div>";
+            count_login = 1;
+
+            count_signup = 0;
+        }
+        else {
+            count_login = 0;
+            document.getElementsByClassName("login_page")[0].innerHTML = "";
+        }
+    }
+    function sign_up() {
+        if (count_signup == 0) {
+            document.getElementsByClassName("login_page")[0].innerHTML = "\
+            <div class='longin'>\
+                    <tr>\
+                        <td>ID:</td>\
+                        <td><input type='text' name='id' /></td>\
+                    </tr>\
+                    <tr>\
+                        <td>Name:</td>\
+                        <td><input type='text' name='name' /></td>\
+                    </tr>\
+                    <tr>\
+                        <td>Password:</td>\
+                        <td><input type='password' name='pswd' /></td>\
+                    </tr>\
+                    <tr>\
+                        <td></td>\
+                        <div class='sumit' onclick='signUp_request()'></div>\
+                    </tr>\
+        </div>";
+            count_signup = 1;
+
+            count_login = 0;
+        }
+        else {
+            count_signup = 0;
+            document.getElementsByClassName("login_page")[0].innerHTML = "";
+        }
+    }
+
+    function upload() {
+        var html = '\
+        <form action="/upload" method="post" enctype="multipart/form-data">\
+            <input type="file" name="file" multiple>\
+                <input type="submit" value="Upload">\
+        </form>';
+        if (count_upload == 0) {
+            document.getElementsByClassName("upload_page")[0].innerHTML = html;
+            count_upload = 2;
+        }
+        else {
+            count_upload = 0;
+            document.getElementsByClassName("upload_page")[0].innerHTML = "";
+        }
+    }                
+</script>
+<style>
+    .login {
+        position: absolute;
+        left: 50%;
+        top: 10%;
+        width: 50%;
+        height: 200px;
+        background-color: pink;
+    }
+
+    .register {
+        position: absolute;
+        left: 50%;
+        top: 30%;
+        width: 50%;
+        height: 200px;
+        background-color: pink;
+    }
+
+    .sumit {
+        position: absolute;
+        width: 200px;
+        height: 100px;
+        left: 50%;
+        top: 50%;
+        background-color: steelblue;
+    }
+</style>
+
+<body>
+    <div class="login" onclick="login()">
+        login Button
+    </div>
+    <div class="register" onclick="sign_up()">
+        Register Button
+    </div>
+    <div class="login_page">
+
+    </div>
+    <div class="upload_page">
+
+    </div>
+    <div class="login_fail">
+
+    </div>
+    <div class="logined_name">
+
+    </div>
+</body>
+<script>
+
+    var httpRequest;
+
+    function login_request() {
+        httpRequest = new XMLHttpRequest();
+
+        if (!httpRequest) {
+            alert("Networkin' Error");
+            return false;
+        }
+        httpRequest.onreadystatechange = login_event;
+        httpRequest.open("POST", "/login", true);
+        var id = document.getElementsByName('id')[0].value;
+        var pswd = document.getElementsByName('pswd')[0].value;
+        httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        httpRequest.send("pswd=" + pswd + "&id=" + id);
+    }
+
+    function login_event() {
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (true) {
+
+                var res = httpRequest.responseText.replace("true&", "")
+                    .replace("false", "");
+                    alert(httpRequest.responseText);
+                document.getElementsByClassName('logined_name')[0].innerHTML = res;
+                
+            } else {
+                alert('request error');
+            }
+        }
+    }
+
+    function signUp_request() {
+        httpRequest = new XMLHttpRequest();
+
+        if (!httpRequest) {
+            alert("Networkin' Error");
+            return false;
+        }
+        httpRequest.onreadystatechange = signUp_event;
+        httpRequest.open("POST", "/sign_up", true);
+        var id = document.getElementsByName('id')[0].value;
+        var name = document.getElementsByName('name')[0].value;
+        var pswd = document.getElementsByName('pswd')[0].value;
+        httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        httpRequest.send("pswd=" + pswd + "&id=" + id + "&name=" + name);
+    }
+
+    function signUp_event() {
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (httpRequest.status === 200) {
+
+                var res = httpRequest.responseText.replace("true&", "")
+                    .replace("false", "");
+                alert(httpRequest.responseText);
+                //document.getElementsByClassName('logined_name')[0].innerHTML = res;
+            } else {
+                alert(httpRequest.responseText);
+                alert('request error');
+            }
+        }
+    }
+
+</script>
+
+</html>
