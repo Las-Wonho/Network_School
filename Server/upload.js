@@ -6,6 +6,7 @@ const render = require('./render');
 const router = require('koa-router')();
 const koaBody = require('koa-body');
 const Koa = require('koa');
+const KoaStatic = require('koa-static');
 
 const app = module.exports = new Koa();
 
@@ -14,7 +15,7 @@ app.use(koaBody({
     multipart: true,
     urlencoded: true
 }));
-
+app.use(KoaStatic('../Client'));
 app.use(render);
 
 router.get('/', list);
