@@ -1,53 +1,77 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-    crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/shards-ui@latest/dist/css/shards.min.css">
-
-<form class="was-validated" action="/upload" method="post" enctype="multipart/form-data">
-    <div class="col-md-12">
-        <div class="row">
-            <div class="row-md-120">
-                <label for="form-2-first-name">Name</label>
-                <input type="text" name="name" class="form-control width200">
+<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css' integrity='sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO'
+    crossorigin='anonymous'>
+<link rel='stylesheet' href='https://unpkg.com/shards-ui@latest/dist/css/shards.min.css'>
+<div align="center">
+    <div style="height: 100%; width: 100%;">
+        <main class ="change">
+            <div class='info' style="position: absolute; top: 50%;left: 50%; transform: translateY(-50%) translateX(-50%);">
+                <button type="button" class="btn btn-primary btn-lg" onclick="OpenForm()">Login</button>
             </div>
-
-            <div class="row-md-120">
-                <label for="form-2-first-name">Dev Name</label>
-                <input type="text" name="dev_name" class="form-control width200">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="row-md-120">
-                <label for="form-2-first-name">Documentation</label>
-                <input type="text" name="document" class="form-control width200">
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="row-md-120">
-                <label for="form-2-first-name">Files</label>
-                <div class="custom-file mb-3">
-                    <input type="file" class="custom-file-input" name="file" multiple>
-                    <label class="custom-file-label" for="customFile">Default custom file input</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="row-md-120">
-                <label for="form-2-first-name">Photo</label>
-                <div class="custom-file mb-3">
-                    <input type="file" class="custom-file-input" name="back" multiple>
-                    <label class="custom-file-label" for="customFile">Default custom file input</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="row-md-120">
-                <input type="submit" class="btn btn-primary" value="Upload">
-            </div>
-        </div>
+        </main>
     </div>
-</form>
+</div>
+<script>
+    const req = new XMLHttpRequest();
+    const info = document.getElementsByClassName('info')[0];
+    const change = document.getElementsByClassName('change')[0];
+    const select = '<div><div class="btn-group" role="group" aria-label="Basic example">\
+  <button type="button" class="btn btn-primary btn-lg" onclick="GetForm(\'/ff\')">Upload</button>\
+  <button type="button" class="btn btn-primary btn-lg" onclick="GetForm(\'/list\')">Change</button>\
+</div></div>';
+    function innerAdd(el, str) {
+        el.innerHTML = str;
+    }
+    function DDD(data) {
+        if (data == 2) {
+            alert("Failed");
+            const html_data = '<button type="button" class="btn btn-primary btn-lg" onclick="OpenForm()">Login</button>';
+            innerAdd(info, html_data);
+            return;
+        } else {
+            const html_data = "안녕하십니까 " + data + '님' + select;
+            innerAdd(info, html_data);
+        }
+    }
+
+    function FindClass(name) {
+        return document.getElementsByClassName(name)[0];
+    }
+    function FindName(name) {
+        return document.getElementsByName(name)[0];
+    }
+
+    function GetValue(f) {
+        return (arg) => f(arg).value;
+    }
+    function WrappingInputTagValue(fineElement) {
+        return (arg) => arg + '=' + fineElement(arg);
+    }
+    const getWrappedValueByName = WrappingInputTagValue(GetValue(FindName));
+    function OpenForm() {
+        var html = "\
+            <input type='text' name='id' placeholder='ID'>\
+            <input type='text' name='password' placeholder='Password'>\
+            <div onclick='Login()'>Submit</div>\
+            ";
+        innerAdd(info, html);
+    }
+    function Login() {
+
+        const id = getWrappedValueByName('id');
+        const password = getWrappedValueByName('password');
+        const param = id + "&" + password;
+
+        req.addEventListener("load", () => DDD(req.responseText));
+        req.open("GET", "/Login?" + param, true);
+        req.send(null);
+    }
+    function GetForm(url) {
+        req.addEventListener("load", () => innerAdd(change, select+req.responseText));
+        req.open("GET", url, true);
+        req.send(null);
+    }
+    function selected(params) {
+        const el = FindName(params);
+        innerAdd(el,'selected');
+    }
+</script>
