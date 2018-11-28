@@ -1,19 +1,20 @@
 <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css' integrity='sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO'
     crossorigin='anonymous'>
 <link rel='stylesheet' href='https://unpkg.com/shards-ui@latest/dist/css/shards.min.css'>
-<div align="center">
-    <div style="height: 100%; width: 100%;">
-        <main class ="change">
-            <div class='info' style="position: absolute; top: 50%;left: 50%; transform: translateY(-50%) translateX(-50%);">
-                <button type="button" class="btn btn-primary btn-lg" onclick="OpenForm()">Login</button>
-            </div>
-        </main>
-    </div>
+<div style="height: 100%; width: 100%;">
+    <main>
+
+        <div class="change_card" style="position: absolute; top: 10%;left: 50%; transform:translateX(-50%);">
+
+        </div>
+        <div class='info' style="position: absolute; top: 50%;left: 50%; transform: translateY(-50%) translateX(-50%);">
+
+            <button type="button" class="btn btn-primary btn-lg" onclick="OpenForm()">Login</button>
+        </div>
+    </main>
 </div>
 <script>
-    const req = new XMLHttpRequest();
     const info = document.getElementsByClassName('info')[0];
-    const change = document.getElementsByClassName('change')[0];
     const select = '<div><div class="btn-group" role="group" aria-label="Basic example">\
   <button type="button" class="btn btn-primary btn-lg" onclick="GetForm(\'/ff\')">Upload</button>\
   <button type="button" class="btn btn-primary btn-lg" onclick="GetForm(\'/list\')">Change</button>\
@@ -56,7 +57,7 @@
         innerAdd(info, html);
     }
     function Login() {
-
+        const req = new XMLHttpRequest();
         const id = getWrappedValueByName('id');
         const password = getWrappedValueByName('password');
         const param = id + "&" + password;
@@ -66,12 +67,33 @@
         req.send(null);
     }
     function GetForm(url) {
-        req.addEventListener("load", () => innerAdd(change, select+req.responseText));
+        const req = new XMLHttpRequest();
+        const change = FindClass("change_card");
+        if (url == "/list") {
+            req.addEventListener("load", () => { innerAdd(change, req.responseText + select); innerAdd(info, ""); });
+        } else {
+            req.addEventListener("load", () => { innerAdd(info, req.responseText + select); innerAdd(change, ""); });
+        }
         req.open("GET", url, true);
         req.send(null);
     }
     function selected(params) {
         const el = FindName(params);
-        innerAdd(el,'selected');
+        innerAdd(el, 'selected');
+    }
+    function OpenForm_change(name, inter) {
+        const req = new XMLHttpRequest();
+        const change = FindClass("change_card");
+        req.addEventListener("load", () => {
+            innerAdd(info, req.responseText + select);
+            innerAdd(change, "");
+            FindName("name").setAttribute('value', name);
+            FindName("document").value = inter;
+        });
+        req.open("GET", '/fff   ', true);
+        req.send(null);
+
+
+
     }
 </script>
